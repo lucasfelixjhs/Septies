@@ -330,3 +330,30 @@ legend {
 input,select {
   font-size:14px}
 }
+
+.prototype-notice {
+  border-left: 2px solid var(--red);
+  padding: 12px 16px;
+  background: #f5efe4;
+  color: #6c5d4b;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.prototype-button {
+  margin-top: 16px;
+  border: 1px solid #b4a17e;
+  background: #fffcf5;
+  color: var(--red);
+  padding: 10px 14px;
+  max-width: 100%;
+  line-height: 1.5;
+}
+.liturgical-line { display: block; }
+.liturgical-rubric { color: var(--red); }
+.text-block { margin-block: 30px; }
+.text-block h3 { font-weight: 400; line-height: 1.5; }
+.text-block a, .prototype-notice a { color: var(--red); overflow-wrap: anywhere; }
+.parallel > * { min-width: 0; }
+@media (max-width: 480px) {
+  .parallel { grid-template-columns: 1fr; gap: 8px; }
+}

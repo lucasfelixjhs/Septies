@@ -4,6 +4,7 @@ import { modern } from './engines/modern';
 import { roman1960 } from './engines/roman1960';
 import { formatDate, localDate } from './calendar';
 import { Reader } from './components/Reader';
+import { COMPLINE_TEST_DATE } from './engines/roman1960/compline';
 export default function App() {
   const [date, setDate] = useState(localDate);
   const [office, setOffice] = useState<Office>('modern');
@@ -14,6 +15,12 @@ export default function App() {
   function changeOffice(value: Office) {
     setOffice(value);
     if (value === 'modern' && hour === 'prime') setHour('lauds');
+  }
+  function openComplinePrototype() {
+    setDate(COMPLINE_TEST_DATE);
+    setOffice('roman1960');
+    setHour('compline');
+    setLanguage('la');
   }
   return <>
     <a className="skip-link" href="#lector">Ir al lector</a>
@@ -27,12 +34,12 @@ export default function App() {
       <div className="workspace">
         <nav className="hours" aria-label="Horas del oficio"><p className="eyebrow">Las horas del día</p>{engine.hours.map((item, i) => <button key={item.id} aria-current={hour === item.id ? 'true' : undefined} onClick={() => setHour(item.id)}><span className="hour-number">{String(i + 1).padStart(2, '0')}</span><span>{item.label}<small lang="la">{item.latin}</small></span><span className="hour-dot" aria-hidden="true">·</span></button>)}<p className="nav-note">{office === 'modern' ? 'Prima no forma parte de la Liturgia de las Horas actual.' : 'El Invitatorio se presenta como acceso propio; forma parte de Maitines.'}</p></nav>
         <article id="lector" className="reader" aria-label="Lector litúrgico">
-          <div className="reader-heading"><p className="eyebrow">{office === 'modern' ? 'Liturgia de las Horas' : 'Breviario Romano · 1960'}</p><h2>{composition.hour.label}</h2><p className="latin-title" lang="la">{composition.hour.latin}</p><div className="divider" aria-hidden="true">✦</div><p className="date-label">{formatDate(date)}</p><span className="status">Textos y composición pendientes</span></div>
+          <div className="reader-heading"><p className="eyebrow">{office === 'modern' ? 'Liturgia de las Horas' : 'Breviario Romano · 1960'}</p><h2>{composition.hour.label}</h2><p className="latin-title" lang="la">{composition.hour.latin}</p><div className="divider" aria-hidden="true">✦</div><p className="date-label">{formatDate(date)}</p>{composition.celebration && <p className="date-label">{composition.celebration}</p>}<span className="status">{composition.status === 'prototype' ? 'Prototipo latino · Fecha de prueba fija' : 'Textos y composición pendientes'}</span></div>
           <div aria-live="polite"><Reader composition={composition} language={language} /></div>
           <footer className="reader-footer">{language === 'bilingual' ? 'Lectura bilingüe · Latín / Español' : language === 'la' ? 'Lectura en latín' : 'Lectura en español'}<span>Calendario litúrgico en desarrollo</span></footer>
         </article>
       </div>
-      <aside className="development"><strong>Una obra en preparación</strong><p>Ya puedes explorar los dos oficios, sus horas y las opciones de lectura. El calendario litúrgico, las rúbricas y la asignación de textos aún no están implementados. La fecha seleccionada es civil y no determina celebraciones.</p></aside>
+      <aside className="development"><strong>Una obra en preparación</strong><p>Disponible: Completas en latín del Breviario de 1960 para el 7 de julio de 2026. Las demás horas y fechas, el calendario completo y las traducciones siguen en desarrollo. La selección de fecha no calcula celebraciones fuera de este caso documentado.</p><button className="prototype-button" onClick={openComplinePrototype}>Abrir Completas · 7 de julio de 2026</button></aside>
     </main><footer className="site-footer"><span>SEPTIES</span><p>Una invitación a santificar el tiempo.</p></footer>
   </>;
 }
